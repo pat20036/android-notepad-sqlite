@@ -1,5 +1,7 @@
 package com.pat.notepad
 
+import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import android.view.LayoutInflater
@@ -7,9 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerViewAdapter(val database: SQLiteDatabase) : RecyclerView.Adapter<MyViewHolder>() {
+class RecyclerViewAdapter(val context: Context, val database: SQLiteDatabase) : RecyclerView.Adapter<MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -18,6 +21,13 @@ class RecyclerViewAdapter(val database: SQLiteDatabase) : RecyclerView.Adapter<M
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val itemHolder = holder.view.findViewById<ConstraintLayout>(R.id.noteItem)
+        val itemContext = holder.view.context
+        itemHolder.setOnClickListener()
+        {
+            editNote(holder, itemContext)
+        }
+
         getDatabaseData(holder)
     }
 
@@ -63,6 +73,22 @@ class RecyclerViewAdapter(val database: SQLiteDatabase) : RecyclerView.Adapter<M
                 noteText.setText(dbCursor.getString(2))
             }
         }
+    }
+
+
+    private fun editNote(holder: MyViewHolder, context: Context)
+    {
+        val noteId = holder.adapterPosition.plus(1)
+        val noteTitleText = holder.view.findViewById<TextView>(R.id.noteTitleTextView).text
+        val noteTextText = holder.view.findViewById<TextView>(R.id.noteTextTextView).text
+
+        val intent = Intent(context, NoteActivity::class.java)
+        intent.putExtra("id", noteId)
+        intent.putExtra("title", noteTitleText)
+        intent.putExtra("text", noteTextText)
+
+        context.startActivity(intent)
+
     }
 
 

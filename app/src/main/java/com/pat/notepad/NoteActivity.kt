@@ -22,6 +22,15 @@ class NoteActivity : AppCompatActivity() {
         setSupportActionBar(binding.noteToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        if(intent.hasExtra("title"))
+        {
+            binding.noteTitleEditText.setText(intent.getStringExtra("title"))
+        }
+        if(intent.hasExtra("text"))
+        {
+            binding.noteTextEditText.setText(intent.getStringExtra("text"))
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(applicationContext)
-        recyclerView.adapter = RecyclerViewAdapter(database)
+        recyclerView.adapter = RecyclerViewAdapter(applicationContext, database)
     }
 
 
