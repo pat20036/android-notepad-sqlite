@@ -1,6 +1,7 @@
 package com.pat.notepad
 
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.pat.notepad.databinding.ActivityMainBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -15,7 +17,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel by viewModel<MainViewModel>()
-
+    private lateinit var database: SQLiteDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
@@ -24,9 +26,17 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         binding.toolbar.setTitleTextColor(Color.WHITE)
 
-        mainViewModel.createDatabase(applicationContext)
 
+        database = mainViewModel.createDatabase(applicationContext)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(applicationContext)
+        recyclerView.adapter = RecyclerViewAdapter(database)
     }
 
 
