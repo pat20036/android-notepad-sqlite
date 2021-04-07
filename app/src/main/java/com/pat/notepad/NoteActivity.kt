@@ -1,12 +1,16 @@
 package com.pat.notepad
 
 import android.content.ContentValues
+import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
+import com.pat.notepad.TableInfo.TABLE_COLUMN_TITLE
+import com.pat.notepad.TableInfo.TABLE_COLUMN_NOTE
 import com.pat.notepad.TableInfo.TABLE_NAME
 import com.pat.notepad.databinding.ActivityNoteBinding
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -14,7 +18,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class NoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNoteBinding
     private val mainViewModel by viewModel<MainViewModel>()
-
+    private lateinit var  database:SQLiteDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNoteBinding.inflate(layoutInflater)
@@ -22,14 +26,15 @@ class NoteActivity : AppCompatActivity() {
         setSupportActionBar(binding.noteToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if(intent.hasExtra("title"))
-        {
+        database = mainViewModel.createDatabase(applicationContext)
+
+        if (intent.hasExtra("title")) {
             binding.noteTitleEditText.setText(intent.getStringExtra("title"))
         }
-        if(intent.hasExtra("text"))
-        {
+        if (intent.hasExtra("text")) {
             binding.noteTextEditText.setText(intent.getStringExtra("text"))
         }
+
 
     }
 
@@ -53,26 +58,43 @@ class NoteActivity : AppCompatActivity() {
 
 
     private fun saveNote() {
-        val database = mainViewModel.createDatabase(applicationContext)
-
         val noteTitle = binding.noteTitleEditText.text.toString()
         val noteText = binding.noteTextEditText.text.toString()
-        if (noteTitle.isNotBlank() && noteText.isNotBlank()) {
-            val contentValues = ContentValues().apply {
-                put("Title", noteTitle)
-                put("Note", noteText)
-            }
+        val contentValues = ContentValues().apply {
+            put(TABLE_COLUMN_TITLE, noteTitle)
+            put(TABLE_COLUMN_NOTE, noteText)
+        }
+        if (intent.hasExtra("id")) {
+            updateNote(noteTitle, noteText, contentValues)
+        } else {
+            addNote(noteTitle, noteText,contentValues)
+        }
+    }
 
+    private fun addNote(noteTitle: String, noteText: String, contentValues: ContentValues) {
+
+        if (noteTitle.isNotBlank() && noteText.isNotBlank()) {
             database.insertOrThrow(TABLE_NAME, null, contentValues)
             Toast.makeText(this, "Note saved!", Toast.LENGTH_SHORT).show()
 
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, "Fields cannot be empty!", Toast.LENGTH_SHORT).show()
         }
-
-
     }
 
+    private fun updateNote(noteTitle: String, noteText: String, contentValues: ContentValues) {
+
+        if (noteTitle.isNotBlank() && noteText.isNotBlank()) {
+            database.update(
+                TABLE_NAME,
+                contentValues,
+                BaseColumns._ID + "=?",
+                arrayOf(intent.getStringExtra("id"))
+            )
+            Toast.makeText(this, "Note saved!", Toast.LENGTH_SHORT).show()
+
+        } else {
+            Toast.makeText(this, "Fields cannot be empty!", Toast.LENGTH_SHORT).show()
+        }
+    }
 }

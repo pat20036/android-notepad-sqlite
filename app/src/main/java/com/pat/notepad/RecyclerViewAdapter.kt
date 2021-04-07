@@ -61,7 +61,7 @@ class RecyclerViewAdapter(val context: Context, val database: SQLiteDatabase) : 
             TableInfo.TABLE_NAME,
             null,
             BaseColumns._ID + "=?",
-            arrayOf(holder.adapterPosition.plus(1).toString()),
+            arrayOf(holder.adapterPosition.plus(2).toString()),
             null,
             null,
             null
@@ -78,9 +78,9 @@ class RecyclerViewAdapter(val context: Context, val database: SQLiteDatabase) : 
 
     private fun editNote(holder: MyViewHolder, context: Context)
     {
-        val noteId = holder.adapterPosition.plus(1)
         val noteTitleText = holder.view.findViewById<TextView>(R.id.noteTitleTextView).text
         val noteTextText = holder.view.findViewById<TextView>(R.id.noteTextTextView).text
+        val noteId = holder.adapterPosition.plus(2).toString()
 
         val intent = Intent(context, NoteActivity::class.java)
         intent.putExtra("id", noteId)
