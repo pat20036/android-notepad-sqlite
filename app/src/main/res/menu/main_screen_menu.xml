@@ -7,9 +7,4 @@
         android:icon="@drawable/add_circle_black_24dp"
         android:title="@string/add_note"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/deleteNote"
-        android:icon="@drawable/delete_black_24dp"
-        android:title="@string/delete"
-        app:showAsAction="always" />
 </menu>

@@ -39,6 +39,11 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = RecyclerViewAdapter(applicationContext, database)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        database.close()
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
@@ -53,10 +58,7 @@ class MainActivity : AppCompatActivity() {
                 addNote()
                 true
             }
-            R.id.deleteNote -> {
 
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }

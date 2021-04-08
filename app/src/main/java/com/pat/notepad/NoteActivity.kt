@@ -18,18 +18,20 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class NoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNoteBinding
     private val mainViewModel by viewModel<MainViewModel>()
-    private lateinit var  database:SQLiteDatabase
+    private lateinit var database: SQLiteDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.noteToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Add note"
 
         database = mainViewModel.createDatabase(applicationContext)
 
         if (intent.hasExtra("title")) {
             binding.noteTitleEditText.setText(intent.getStringExtra("title"))
+            supportActionBar?.title = "Edit note"
         }
         if (intent.hasExtra("text")) {
             binding.noteTextEditText.setText(intent.getStringExtra("text"))
@@ -65,36 +67,23 @@ class NoteActivity : AppCompatActivity() {
             put(TABLE_COLUMN_NOTE, noteText)
         }
         if (intent.hasExtra("id")) {
-            updateNote(noteTitle, noteText, contentValues)
-        } else {
-            addNote(noteTitle, noteText,contentValues)
-        }
-    }
-
-    private fun addNote(noteTitle: String, noteText: String, contentValues: ContentValues) {
-
-        if (noteTitle.isNotBlank() && noteText.isNotBlank()) {
-            database.insertOrThrow(TABLE_NAME, null, contentValues)
-            Toast.makeText(this, "Note saved!", Toast.LENGTH_SHORT).show()
-
-        } else {
-            Toast.makeText(this, "Fields cannot be empty!", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun updateNote(noteTitle: String, noteText: String, contentValues: ContentValues) {
-
-        if (noteTitle.isNotBlank() && noteText.isNotBlank()) {
-            database.update(
-                TABLE_NAME,
-                contentValues,
-                BaseColumns._ID + "=?",
-                arrayOf(intent.getStringExtra("id"))
+            mainViewModel.updateNote(
+                applicationContext,
+                intent,
+                database,
+                noteTitle,
+                noteText,
+                contentValues
             )
-            Toast.makeText(this, "Note saved!", Toast.LENGTH_SHORT).show()
 
+            finish()
         } else {
-            Toast.makeText(this, "Fields cannot be empty!", Toast.LENGTH_SHORT).show()
+            mainViewModel.addNote(applicationContext, database, noteTitle, noteText, contentValues)
+
+            finish()
         }
+
     }
+
+
 }
