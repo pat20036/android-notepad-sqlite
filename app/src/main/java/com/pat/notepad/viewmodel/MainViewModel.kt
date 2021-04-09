@@ -1,11 +1,12 @@
-package com.pat.notepad
+package com.pat.notepad.viewmodel
 
-import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.pat.notepad.DatabaseInterface
+import com.pat.notepad.model.Note
 
 class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewModel() {
 

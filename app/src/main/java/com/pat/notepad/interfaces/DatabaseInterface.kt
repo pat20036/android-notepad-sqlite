@@ -5,8 +5,9 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
+import com.pat.notepad.helpers.DatabaseHelper
+import com.pat.notepad.model.Note
 
 interface DatabaseInterface {
     fun createDatabase(): SQLiteDatabase

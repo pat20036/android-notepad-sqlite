@@ -1,15 +1,13 @@
-package com.pat.notepad
+package com.pat.notepad.view
 
-import android.content.ClipDescription
-import android.content.ContentValues
-import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.pat.notepad.TableInfo.TABLE_COLUMN_TITLE
-import com.pat.notepad.TableInfo.TABLE_COLUMN_NOTE
+import com.pat.notepad.DatabaseInterface
+import com.pat.notepad.viewmodel.MainViewModel
+import com.pat.notepad.R
 import com.pat.notepad.databinding.ActivityNoteBinding
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel

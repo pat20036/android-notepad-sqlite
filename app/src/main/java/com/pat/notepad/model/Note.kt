@@ -1,4 +1,4 @@
-package com.pat.notepad
+package com.pat.notepad.model
 
 data class Note(
     val title:String,

@@ -1,4 +1,4 @@
-package com.pat.notepad
+package com.pat.notepad.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.pat.notepad.R
+import com.pat.notepad.model.Note
+import com.pat.notepad.view.NoteActivity
 
 class RecyclerAdapter(private val noteList: MutableList<Note>, private val context: Context) : RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>() {
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {

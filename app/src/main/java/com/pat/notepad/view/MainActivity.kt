@@ -1,4 +1,4 @@
-package com.pat.notepad
+package com.pat.notepad.view
 
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
@@ -11,9 +11,11 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.pat.notepad.viewmodel.MainViewModel
+import com.pat.notepad.model.Note
+import com.pat.notepad.R
+import com.pat.notepad.adapters.RecyclerAdapter
 import com.pat.notepad.databinding.ActivityMainBinding
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
