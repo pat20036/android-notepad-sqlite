@@ -9,8 +9,11 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.pat.notepad.databinding.ActivityMainBinding
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -18,6 +21,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel by viewModel<MainViewModel>()
     private lateinit var database: SQLiteDatabase
+    private val noteList = mutableListOf<Note>()
+    private val adapter by lazy { RecyclerAdapter(noteList, applicationContext) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
@@ -26,17 +32,19 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         binding.toolbar.setTitleTextColor(Color.WHITE)
 
+        val recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(applicationContext)
+        recyclerView.adapter = adapter
 
-        database = mainViewModel.createDatabase(applicationContext)
+        database = mainViewModel.createDatabase()
+
+        updateNoteList()
 
     }
 
     override fun onResume() {
         super.onResume()
-
-        val recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(applicationContext)
-        recyclerView.adapter = RecyclerViewAdapter(applicationContext, database)
+        mainViewModel.getNoteList()
     }
 
     override fun onDestroy() {
@@ -67,6 +75,18 @@ class MainActivity : AppCompatActivity() {
     private fun addNote() {
         val intent = Intent(this, NoteActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun editNote()
+    {
+
+    }
+
+    private fun updateNoteList() {
+        mainViewModel.noteList.observe(this, Observer {
+            adapter.updateList(it)
+        })
+
     }
 
 

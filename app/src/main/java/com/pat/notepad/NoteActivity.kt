@@ -1,24 +1,24 @@
 package com.pat.notepad
 
+import android.content.ClipDescription
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.BaseColumns
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
 import com.pat.notepad.TableInfo.TABLE_COLUMN_TITLE
 import com.pat.notepad.TableInfo.TABLE_COLUMN_NOTE
-import com.pat.notepad.TableInfo.TABLE_NAME
 import com.pat.notepad.databinding.ActivityNoteBinding
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class NoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNoteBinding
     private val mainViewModel by viewModel<MainViewModel>()
-    private lateinit var database: SQLiteDatabase
+    private val databaseInterface: DatabaseInterface by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNoteBinding.inflate(layoutInflater)
@@ -27,14 +27,13 @@ class NoteActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Add note"
 
-        database = mainViewModel.createDatabase(applicationContext)
 
         if (intent.hasExtra("title")) {
             binding.noteTitleEditText.setText(intent.getStringExtra("title"))
             supportActionBar?.title = "Edit note"
         }
-        if (intent.hasExtra("text")) {
-            binding.noteTextEditText.setText(intent.getStringExtra("text"))
+        if (intent.hasExtra("description")) {
+            binding.noteTextEditText.setText(intent.getStringExtra("description"))
         }
 
 
@@ -47,10 +46,16 @@ class NoteActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
         return when (item.itemId) {
             R.id.saveNote -> {
-                saveNote()
+                val title = binding.noteTitleEditText.text.toString()
+                val description = binding.noteTextEditText.text.toString()
+                if (intent.hasExtra("id")) {
+                    editNote(title,description)
+                } else {
+                    addNote(title, description)
+                }
+
                 true
             }
 
@@ -59,30 +64,13 @@ class NoteActivity : AppCompatActivity() {
     }
 
 
-    private fun saveNote() {
-        val noteTitle = binding.noteTitleEditText.text.toString()
-        val noteText = binding.noteTextEditText.text.toString()
-        val contentValues = ContentValues().apply {
-            put(TABLE_COLUMN_TITLE, noteTitle)
-            put(TABLE_COLUMN_NOTE, noteText)
-        }
-        if (intent.hasExtra("id")) {
-            mainViewModel.updateNote(
-                applicationContext,
-                intent,
-                database,
-                noteTitle,
-                noteText,
-                contentValues
-            )
+    private fun addNote(title: String, description: String) {
+        databaseInterface.addNewNote(title, description)
+    }
 
-            finish()
-        } else {
-            mainViewModel.addNote(applicationContext, database, noteTitle, noteText, contentValues)
-
-            finish()
-        }
-
+    private fun editNote(title: String, description: String) {
+        val id = intent.getStringExtra("id")
+        databaseInterface.editNote(id.toString(), title, description)
     }
 
 

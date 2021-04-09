@@ -1,55 +1,29 @@
 package com.pat.notepad
 
-import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
-import android.provider.BaseColumns
-import android.widget.Toast
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class MainViewModel():ViewModel(){
+class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewModel() {
 
-     fun createDatabase(context: Context): SQLiteDatabase
+    private val _noteList = MutableLiveData<List<Note>>()
+    val noteList: LiveData<List<Note>> get() = _noteList
+
+    fun createDatabase(): SQLiteDatabase {
+        return databaseInterface.createDatabase()
+    }
+
+    fun getNoteList()
     {
-        val dbHelper = DatabaseHelper(context)
-        val db = dbHelper.writableDatabase
-        return db
+        _noteList.value =  databaseInterface.getNoteList()
+        Log.d("qqq", _noteList.value.toString())
     }
 
 
-     fun addNote(context: Context, database:SQLiteDatabase, noteTitle: String, noteText: String, contentValues: ContentValues) {
 
-        if (noteTitle.isNotBlank() && noteText.isNotBlank()) {
-            database.insertOrThrow(TableInfo.TABLE_NAME, null, contentValues)
-            Toast.makeText(context, "Note saved!", Toast.LENGTH_SHORT).show()
-
-        } else {
-            Toast.makeText(context, "Fields cannot be empty!", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
-     fun updateNote(context: Context, intent: Intent, database: SQLiteDatabase, noteTitle: String, noteText: String, contentValues: ContentValues) {
-
-        if (noteTitle.isNotBlank() && noteText.isNotBlank()) {
-            database.update(
-                TableInfo.TABLE_NAME,
-                contentValues,
-                BaseColumns._ID + "=?",
-                arrayOf(intent.getStringExtra("id"))
-            )
-            Toast.makeText(context, "Note saved!", Toast.LENGTH_SHORT).show()
-
-        } else {
-            Toast.makeText(context, "Fields cannot be empty!", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    fun deleteNote()
-    {
-
-    }
 
 
 }
