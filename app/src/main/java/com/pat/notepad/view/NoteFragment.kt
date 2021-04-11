@@ -1,4 +1,4 @@
-package com.pat.notepad
+package com.pat.notepad.view
 
 import android.os.Bundle
 import android.util.Log
@@ -7,11 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import com.pat.notepad.databinding.FragmentMainBinding
 import com.pat.notepad.databinding.FragmentNoteBinding
 import com.pat.notepad.viewmodel.MainViewModel
-import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class NoteFragment : Fragment() {

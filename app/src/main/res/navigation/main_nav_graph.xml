@@ -6,7 +6,7 @@
     app:startDestination="@id/mainFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.pat.notepad.MainFragment"
+        android:name="com.pat.notepad.view.MainFragment"
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment_to_noteFragment"
@@ -14,6 +14,6 @@
     </fragment>
     <fragment
         android:id="@+id/noteFragment"
-        android:name="com.pat.notepad.NoteFragment"
+        android:name="com.pat.notepad.view.NoteFragment"
         android:label="NoteFragment" />
 </navigation>

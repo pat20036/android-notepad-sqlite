@@ -1,4 +1,4 @@
-package com.pat.notepad
+package com.pat.notepad.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

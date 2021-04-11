@@ -1,4 +1,4 @@
-package com.pat.notepad
+package com.pat.notepad.view
 
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.pat.notepad.R
 import com.pat.notepad.adapters.RecyclerAdapter
 import com.pat.notepad.databinding.FragmentMainBinding
 import com.pat.notepad.model.Note
 import com.pat.notepad.viewmodel.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
