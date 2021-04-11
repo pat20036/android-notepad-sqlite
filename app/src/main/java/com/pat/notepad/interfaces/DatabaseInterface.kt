@@ -8,12 +8,15 @@ import android.util.Log
 import android.widget.Toast
 import com.pat.notepad.helpers.DatabaseHelper
 import com.pat.notepad.model.Note
+import com.pat.notepad.model.SelectedNote
 
 interface DatabaseInterface {
     fun createDatabase(): SQLiteDatabase
     fun getNoteList(): List<Note>
     fun addNewNote(title: String, description: String)
     fun editNote(id:String, title: String, description: String)
+    fun setSelectedNote(id:String, title: String, description: String): SelectedNote
+
 
 }
 
@@ -58,7 +61,6 @@ class DatabaseInterfaceImpl(private val context: Context) : DatabaseInterface {
         }
 
         database.insertOrThrow(TableInfo.TABLE_NAME, null, values)
-        Toast.makeText(context, "Added!", Toast.LENGTH_SHORT).show()
         Log.d("qqq", values.toString())
 
     }
@@ -70,10 +72,13 @@ class DatabaseInterfaceImpl(private val context: Context) : DatabaseInterface {
         }
 
         database.update(TableInfo.TABLE_NAME, values, BaseColumns._ID+"=?", arrayOf(id))
-        Toast.makeText(context, "Edited!", Toast.LENGTH_SHORT).show()
         Log.d("qqq", values.toString())
         Log.d("bbb", id)
 
+    }
+
+    override fun setSelectedNote(id: String, title: String, description: String): SelectedNote {
+        return SelectedNote(id, title, description)
     }
 
 
