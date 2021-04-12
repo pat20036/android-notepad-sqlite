@@ -1,6 +1,7 @@
 package com.pat.notepad.view
 
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -32,29 +33,22 @@ class NoteFragment : Fragment() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        clearViewModelData()
+    }
+
+
     override fun onStart() {
         super.onStart()
         binding.saveNoteItem.setOnClickListener()
         {
-            val title = binding.noteTitleEditText.text.toString()
-            val description = binding.noteTextEditText.text.toString()
-            if (noteId == "")
-            {
-                mainViewModel.addNewNote(title, description)
-                Toast.makeText(activity?.applicationContext, "Added!", Toast.LENGTH_SHORT).show()
-            }
-            else
-            {
-                mainViewModel.editNote(noteId, title, description)
-                Toast.makeText(activity?.applicationContext, "Edited!", Toast.LENGTH_SHORT).show()
-            }
-
-
+            isDataCorrect()
         }
 
     }
 
-    fun updateNoteData() {
+    private fun updateNoteData() {
         val noteData = mainViewModel.selectedNote.value
         Log.d("TAG", noteData.toString())
         if (noteData != null) {
@@ -62,9 +56,34 @@ class NoteFragment : Fragment() {
             binding.noteTitleEditText.setText(noteData.title)
             binding.noteTextEditText.setText(noteData.description)
         }
-
-
     }
 
+    private fun clearViewModelData() {
+        mainViewModel.selectedNote.value = null
+    }
+
+    private fun isDataCorrect()
+    {
+        val title = binding.noteTitleEditText.text.toString()
+        val description = binding.noteTextEditText.text.toString()
+        if (title.isNotBlank() || description.isNotBlank()) {
+            if (noteId == "") {
+                mainViewModel.addNewNote(title, description)
+                Toast.makeText(activity?.applicationContext, "Added!", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                mainViewModel.editNote(noteId, title, description)
+                Toast.makeText(activity?.applicationContext, "Edited!", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+        } else {
+            Toast.makeText(
+                activity?.applicationContext,
+                "Fields cannot be empty!",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
 }

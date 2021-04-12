@@ -48,10 +48,8 @@ class MainFragment : Fragment() {
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
         recyclerView.adapter = adapter
-
         updateUI()
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -64,6 +62,11 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mainViewModel.getNoteList()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        database.close()
     }
 
     private fun updateUI() {

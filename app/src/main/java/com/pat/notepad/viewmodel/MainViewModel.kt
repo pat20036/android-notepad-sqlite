@@ -14,8 +14,7 @@ class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewMode
     private val _noteList = MutableLiveData<List<Note>>()
     val noteList: LiveData<List<Note>> get() = _noteList
 
-    private val _selectedNote = MutableLiveData<SelectedNote>()
-    val selectedNote: LiveData<SelectedNote> get() = _selectedNote
+    val selectedNote = MutableLiveData<SelectedNote>()
 
 
     fun createDatabase(): SQLiteDatabase {
@@ -35,10 +34,14 @@ class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewMode
         databaseInterface.editNote(id, title, description)
     }
 
-    fun setSelectedNoteData(id: String, title: String, description: String)
+    fun deleteNote(id:String)
     {
+        databaseInterface.deleteNote(id)
+    }
+
+    fun setSelectedNoteData(id: String, title: String, description: String) {
         val note = databaseInterface.setSelectedNote(id, title, description)
-        _selectedNote.value = note
+        selectedNote.value = note
 
     }
 

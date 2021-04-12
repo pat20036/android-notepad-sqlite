@@ -14,8 +14,9 @@ interface DatabaseInterface {
     fun createDatabase(): SQLiteDatabase
     fun getNoteList(): List<Note>
     fun addNewNote(title: String, description: String)
-    fun editNote(id:String, title: String, description: String)
-    fun setSelectedNote(id:String, title: String, description: String): SelectedNote
+    fun editNote(id: String, title: String, description: String)
+    fun deleteNote(id: String)
+    fun setSelectedNote(id: String, title: String, description: String): SelectedNote
 
 
 }
@@ -42,11 +43,13 @@ class DatabaseInterfaceImpl(private val context: Context) : DatabaseInterface {
         )
 
         while (dbCursor.moveToNext()) {
+            val id =
+                dbCursor.getString(dbCursor.getColumnIndexOrThrow(BaseColumns._ID))
             val title =
                 dbCursor.getString(dbCursor.getColumnIndexOrThrow(TableInfo.TABLE_COLUMN_TITLE))
             val description =
                 dbCursor.getString(dbCursor.getColumnIndexOrThrow(TableInfo.TABLE_COLUMN_NOTE))
-            noteList.add(Note(title, description))
+            noteList.add(Note(id, title, description))
 
         }
 
@@ -54,7 +57,7 @@ class DatabaseInterfaceImpl(private val context: Context) : DatabaseInterface {
 
     }
 
-    override fun addNewNote(title:String, description:String) {
+    override fun addNewNote(title: String, description: String) {
         val values = ContentValues().apply {
             put(TableInfo.TABLE_COLUMN_TITLE, title)
             put(TableInfo.TABLE_COLUMN_NOTE, description)
@@ -71,10 +74,14 @@ class DatabaseInterfaceImpl(private val context: Context) : DatabaseInterface {
             put(TableInfo.TABLE_COLUMN_NOTE, description)
         }
 
-        database.update(TableInfo.TABLE_NAME, values, BaseColumns._ID+"=?", arrayOf(id))
+        database.update(TableInfo.TABLE_NAME, values, BaseColumns._ID + "=?", arrayOf(id))
         Log.d("qqq", values.toString())
         Log.d("bbb", id)
 
+    }
+
+    override fun deleteNote(id: String) {
+        database.delete(TableInfo.TABLE_NAME, BaseColumns._ID+"=?", arrayOf(id))
     }
 
     override fun setSelectedNote(id: String, title: String, description: String): SelectedNote {
