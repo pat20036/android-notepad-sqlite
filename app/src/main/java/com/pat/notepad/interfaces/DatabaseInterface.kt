@@ -4,8 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import android.util.Log
-import android.widget.Toast
 import com.pat.notepad.helpers.DatabaseHelper
 import com.pat.notepad.model.Note
 import com.pat.notepad.model.SelectedNote
@@ -62,10 +60,7 @@ class DatabaseInterfaceImpl(private val context: Context) : DatabaseInterface {
             put(TableInfo.TABLE_COLUMN_TITLE, title)
             put(TableInfo.TABLE_COLUMN_NOTE, description)
         }
-
         database.insertOrThrow(TableInfo.TABLE_NAME, null, values)
-        Log.d("qqq", values.toString())
-
     }
 
     override fun editNote(id: String, title: String, description: String) {
@@ -73,15 +68,11 @@ class DatabaseInterfaceImpl(private val context: Context) : DatabaseInterface {
             put(TableInfo.TABLE_COLUMN_TITLE, title)
             put(TableInfo.TABLE_COLUMN_NOTE, description)
         }
-
         database.update(TableInfo.TABLE_NAME, values, BaseColumns._ID + "=?", arrayOf(id))
-        Log.d("qqq", values.toString())
-        Log.d("bbb", id)
-
     }
 
     override fun deleteNote(id: String) {
-        database.delete(TableInfo.TABLE_NAME, BaseColumns._ID+"=?", arrayOf(id))
+        database.delete(TableInfo.TABLE_NAME, BaseColumns._ID + "=?", arrayOf(id))
     }
 
     override fun setSelectedNote(id: String, title: String, description: String): SelectedNote {

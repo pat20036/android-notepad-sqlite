@@ -1,13 +1,13 @@
 package com.pat.notepad.view
 
 import android.os.Bundle
-import android.provider.BaseColumns
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.pat.notepad.databinding.FragmentNoteBinding
 import com.pat.notepad.viewmodel.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -45,6 +45,10 @@ class NoteFragment : Fragment() {
         {
             isDataCorrect()
         }
+        binding.backArrow.setOnClickListener()
+        {
+            findNavController().popBackStack()
+        }
 
     }
 
@@ -71,10 +75,12 @@ class NoteFragment : Fragment() {
                 mainViewModel.addNewNote(title, description)
                 Toast.makeText(activity?.applicationContext, "Added!", Toast.LENGTH_SHORT)
                     .show()
+                findNavController().popBackStack()
             } else {
                 mainViewModel.editNote(noteId, title, description)
                 Toast.makeText(activity?.applicationContext, "Edited!", Toast.LENGTH_SHORT)
                     .show()
+                findNavController().popBackStack()
             }
 
         } else {

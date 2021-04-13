@@ -1,10 +1,6 @@
 package com.pat.notepad
 
-import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
-
 import com.pat.notepad.TableInfo.TABLE_NAME
 
 object TableInfo : BaseColumns {

@@ -33,7 +33,6 @@
                 android:layout_marginRight="20dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="Title"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +50,6 @@
                 android:layout_marginRight="20dp"
                 android:ellipsize="end"
                 android:lines="2"
-                android:text="Text..."
                 android:textColor="#404040"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +64,8 @@
                 android:layout_marginRight="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/delete_black_24dp" />
+                app:srcCompat="@drawable/delete_black_24dp"
+                app:tint="#A5A5A5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

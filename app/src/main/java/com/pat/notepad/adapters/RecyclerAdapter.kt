@@ -1,8 +1,5 @@
 package com.pat.notepad.adapters
 
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +10,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.pat.notepad.R
 import com.pat.notepad.model.Note
-import com.pat.notepad.view.MainFragment
 import com.pat.notepad.viewmodel.MainViewModel
 
 class RecyclerAdapter(
@@ -24,10 +20,10 @@ class RecyclerAdapter(
 
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val noteCard = view.findViewById<CardView>(R.id.noteItem)
-        val noteTitle = view.findViewById<TextView>(R.id.noteTitleTextView)
-        val noteDescription = view.findViewById<TextView>(R.id.noteTextTextView)
-        val deleteNoteItem = view.findViewById<ImageView>(R.id.deleteNoteImageView)
+        val noteCard: CardView = view.findViewById(R.id.noteItem)
+        val noteTitle: TextView = view.findViewById(R.id.noteTitleTextView)
+        val noteDescription: TextView = view.findViewById(R.id.noteTextTextView)
+        val deleteNoteItem: ImageView = view.findViewById(R.id.deleteNoteImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -46,7 +42,6 @@ class RecyclerAdapter(
         holder.noteCard.setOnClickListener()
         {
             mainViewModel.setSelectedNoteData(noteItem.id, noteItem.title, noteItem.description)
-            Log.d("www", mainViewModel.selectedNote.value.toString())
             it.findNavController().navigate(R.id.action_mainFragment_to_noteFragment)
 
         }
@@ -61,12 +56,12 @@ class RecyclerAdapter(
 
     override fun getItemCount() = noteList.size
 
-
     fun updateList(note: List<Note>) {
         noteList.clear()
         noteList.addAll(note)
         notifyDataSetChanged()
     }
+
 
 
 

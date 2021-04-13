@@ -1,7 +1,7 @@
 package com.pat.notepad.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.pat.notepad.databinding.ActivityMainBinding
 

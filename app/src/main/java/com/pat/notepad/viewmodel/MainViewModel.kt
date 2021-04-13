@@ -1,7 +1,6 @@
 package com.pat.notepad.viewmodel
 
 import android.database.sqlite.SQLiteDatabase
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +22,6 @@ class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewMode
 
     fun getNoteList() {
         _noteList.value = databaseInterface.getNoteList()
-        Log.d("qqq", _noteList.value.toString())
     }
 
     fun addNewNote(title: String, description: String) {
