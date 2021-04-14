@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.pat.notepad.databinding.FragmentNoteBinding
 import com.pat.notepad.viewmodel.MainViewModel
@@ -16,6 +17,7 @@ class NoteFragment : Fragment() {
     private lateinit var binding: FragmentNoteBinding
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private var noteId = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,18 +40,18 @@ class NoteFragment : Fragment() {
         clearViewModelData()
     }
 
-
     override fun onStart() {
         super.onStart()
         binding.saveNoteItem.setOnClickListener()
         {
-            isDataCorrect()
+            val title = binding.noteTitleEditText.text.toString()
+            val description = binding.noteTextEditText.text.toString()
+            mainViewModel.isDataCorrect(title, description)
         }
         binding.backArrow.setOnClickListener()
         {
             findNavController().popBackStack()
         }
-
     }
 
     private fun updateNoteData() {
@@ -66,30 +68,5 @@ class NoteFragment : Fragment() {
         mainViewModel.selectedNote.value = null
     }
 
-    private fun isDataCorrect()
-    {
-        val title = binding.noteTitleEditText.text.toString()
-        val description = binding.noteTextEditText.text.toString()
-        if (title.isNotBlank() || description.isNotBlank()) {
-            if (noteId == "") {
-                mainViewModel.addNewNote(title, description)
-                Toast.makeText(activity?.applicationContext, "Added!", Toast.LENGTH_SHORT)
-                    .show()
-                findNavController().popBackStack()
-            } else {
-                mainViewModel.editNote(noteId, title, description)
-                Toast.makeText(activity?.applicationContext, "Edited!", Toast.LENGTH_SHORT)
-                    .show()
-                findNavController().popBackStack()
-            }
-
-        } else {
-            Toast.makeText(
-                activity?.applicationContext,
-                "Fields cannot be empty!",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
 
 }

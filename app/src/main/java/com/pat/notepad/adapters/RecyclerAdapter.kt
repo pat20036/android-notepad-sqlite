@@ -37,19 +37,21 @@ class RecyclerAdapter(
         holder.apply {
             noteTitle.text = (noteItem.title)
             noteDescription.text = (noteItem.description)
-        }
 
-        holder.noteCard.setOnClickListener()
-        {
-            mainViewModel.setSelectedNoteData(noteItem.id, noteItem.title, noteItem.description)
-            it.findNavController().navigate(R.id.action_mainFragment_to_noteFragment)
+            noteCard.setOnClickListener()
+            {
+                mainViewModel.setSelectedNoteData(noteItem.id, noteItem.title, noteItem.description)
+                it.findNavController().navigate(R.id.action_mainFragment_to_noteFragment)
+            }
 
-        }
+            deleteNoteItem.setOnClickListener()
+            {
+                mainViewModel.apply {
+                    deleteNote(noteItem.id)
+                    getNoteList()
+                }
 
-        holder.deleteNoteItem.setOnClickListener()
-        {
-            mainViewModel.deleteNote(noteItem.id)
-            notifyItemRemoved(position)
+            }
         }
 
     }
@@ -57,12 +59,12 @@ class RecyclerAdapter(
     override fun getItemCount() = noteList.size
 
     fun updateList(note: List<Note>) {
-        noteList.clear()
-        noteList.addAll(note)
+        noteList.apply {
+            clear()
+            addAll(note)
+        }
         notifyDataSetChanged()
     }
-
-
 
 
 }

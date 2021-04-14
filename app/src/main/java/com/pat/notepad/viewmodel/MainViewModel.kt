@@ -1,9 +1,13 @@
 package com.pat.notepad.viewmodel
 
+import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import com.pat.notepad.DatabaseInterface
 import com.pat.notepad.model.Note
 import com.pat.notepad.model.SelectedNote
@@ -15,6 +19,8 @@ class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewMode
 
     val selectedNote = MutableLiveData<SelectedNote>()
 
+    private val _toastMessage = MutableLiveData<String>()
+    val toastMessage: LiveData<String> get() = _toastMessage
 
     fun createDatabase(): SQLiteDatabase {
         return databaseInterface.createDatabase()
@@ -32,8 +38,7 @@ class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewMode
         databaseInterface.editNote(id, title, description)
     }
 
-    fun deleteNote(id:String)
-    {
+    fun deleteNote(id: String) {
         databaseInterface.deleteNote(id)
     }
 
@@ -43,5 +48,26 @@ class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewMode
 
     }
 
+
+    fun isDataCorrect(title: String, description: String) {
+        val noteData = selectedNote.value
+        Log.d("www", noteData.toString())
+        if (title.isNotBlank() || description.isNotBlank()) {
+            if (noteData == null) {
+                addNewNote(title, description)
+                // findNavController().popBackStack()
+                //Toast "Added"
+            } else {
+                editNote(noteData.id, title, description)
+                // findNavController().popBackStack()
+                //Toast "Edited"
+            }
+        }
+        else
+        {
+            //Toast "Fields cannot be empty"
+        }
+
+    }
 
 }
