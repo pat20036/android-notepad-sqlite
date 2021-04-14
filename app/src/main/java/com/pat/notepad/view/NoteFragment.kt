@@ -17,6 +17,7 @@ class NoteFragment : Fragment() {
     private lateinit var binding: FragmentNoteBinding
     private val mainViewModel by sharedViewModel<MainViewModel>()
     private var noteId = ""
+    private var toastMessage = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +31,7 @@ class NoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateNoteData()
+        observeToastMessage()
         if (noteId != "") {
             binding.noteToolbar.title = "Edit note"
         }
@@ -47,6 +49,7 @@ class NoteFragment : Fragment() {
             val title = binding.noteTitleEditText.text.toString()
             val description = binding.noteTextEditText.text.toString()
             mainViewModel.isDataCorrect(title, description)
+            message()
         }
         binding.backArrow.setOnClickListener()
         {
@@ -67,6 +70,16 @@ class NoteFragment : Fragment() {
     private fun clearViewModelData() {
         mainViewModel.selectedNote.value = null
     }
+    private fun message()
+    {
+        Toast.makeText(activity?.applicationContext, toastMessage, Toast.LENGTH_LONG).show()
+    }
 
+    private fun observeToastMessage()
+    {
+        mainViewModel.toastMessage.observe(viewLifecycleOwner, Observer {
+            toastMessage = it
+        })
+    }
 
 }

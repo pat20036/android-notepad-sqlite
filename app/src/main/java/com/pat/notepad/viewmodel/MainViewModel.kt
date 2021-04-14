@@ -56,16 +56,16 @@ class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewMode
             if (noteData == null) {
                 addNewNote(title, description)
                 // findNavController().popBackStack()
-                //Toast "Added"
+                _toastMessage.value = "Added!"
             } else {
                 editNote(noteData.id, title, description)
                 // findNavController().popBackStack()
-                //Toast "Edited"
+                _toastMessage.value = "Edited!"
             }
         }
         else
         {
-            //Toast "Fields cannot be empty"
+            _toastMessage.value = "Fields cannot be empty!"
         }
 
     }
