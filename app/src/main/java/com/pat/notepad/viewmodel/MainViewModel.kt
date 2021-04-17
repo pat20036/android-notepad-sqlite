@@ -9,10 +9,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.pat.notepad.DatabaseInterface
+import com.pat.notepad.NavigationCommander
+import com.pat.notepad.NavigationCommanderImpl
 import com.pat.notepad.model.Note
 import com.pat.notepad.model.SelectedNote
 
-class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewModel() {
+class MainViewModel(private val databaseInterface: DatabaseInterface, private val navigationCommander: NavigationCommander): ViewModel() {
 
     private val _noteList = MutableLiveData<List<Note>>()
     val noteList: LiveData<List<Note>> get() = _noteList
@@ -55,11 +57,11 @@ class MainViewModel(private val databaseInterface: DatabaseInterface) : ViewMode
         if (title.isNotBlank() || description.isNotBlank()) {
             if (noteData == null) {
                 addNewNote(title, description)
-                // findNavController().popBackStack()
+                navigationCommander.popBackStack()
                 _toastMessage.value = "Added!"
             } else {
                 editNote(noteData.id, title, description)
-                // findNavController().popBackStack()
+                navigationCommander.popBackStack()
                 _toastMessage.value = "Edited!"
             }
         }
