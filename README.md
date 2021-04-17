@@ -1,5 +1,5 @@
 # Android Notepad
-Android app that allows searching  GitHub repositories.
+Android notepad using SQLite.
 
 ## Features 
 - Adding notes
