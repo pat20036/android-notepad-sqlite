@@ -32,11 +32,11 @@ class MainViewModel(private val databaseInterface: DatabaseInterface, private va
         _noteList.value = databaseInterface.getNoteList()
     }
 
-    fun addNewNote(title: String, description: String) {
+    private fun addNewNote(title: String, description: String) {
         databaseInterface.addNewNote(title, description)
     }
 
-    fun editNote(id: String, title: String, description: String) {
+    private fun editNote(id: String, title: String, description: String) {
         databaseInterface.editNote(id, title, description)
     }
 
@@ -53,7 +53,6 @@ class MainViewModel(private val databaseInterface: DatabaseInterface, private va
 
     fun isDataCorrect(title: String, description: String) {
         val noteData = selectedNote.value
-        Log.d("www", noteData.toString())
         if (title.isNotBlank() || description.isNotBlank()) {
             if (noteData == null) {
                 addNewNote(title, description)
